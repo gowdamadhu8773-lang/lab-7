@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MADHU - Modern Mathematics Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        glassBorder: 'rgba(255, 255, 255, 0.18)',
+                        glassBackground: 'rgba(255, 255, 255, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .glass-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-input:focus {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="text-gray-100 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8">
+
+    <header class="text-center mb-8">
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+            MADHU
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-400 mt-2">Advanced Form & Grid Mathematics Suite</p>
+    </header>
+
+    <main class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left 2 Columns: Calculators -->
+        <div class="lg:col-span-2 space-y-6">
+
+            <!-- Mode Switcher -->
+            <div class="glass-panel p-2 rounded-2xl flex space-x-2">
+                <button id="tabGridBtn" onclick="switchMode('grid')" class="flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all bg-purple-600/60 shadow-lg text-white">
+                    <i class="fa-solid fa-calculator mr-2"></i> Interactive Grid
+                </button>
+                <button id="tabFormBtn" onclick="switchMode('form')" class="flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all text-gray-400 hover:text-white hover:bg-white/5">
+                    <i class="fa-solid fa-list-check mr-2"></i> Form Inputs
+                </button>
+            </div>
+
+            <div id="gridCalculator" class="glass-panel p-6 sm:p-8 rounded-3xl">
+                <!-- Display Screen -->
+                <div class="mb-6">
+                    <div id="gridHistoryPreview" class="text-right text-xs sm:text-sm text-gray-400 h-6 overflow-hidden"></div>
+                    <div id="gridDisplay" class="glass-input w-full text-right text-3xl sm:text-4xl font-semibold tracking-wider p-4 rounded-2xl text-white overflow-x-auto">0</div>
+                </div>
+
+                <!-- Keypad Grid -->
+                <div class="grid grid-cols-4 gap-3 sm:gap-4">
+                    <button onclick="gridClear()" class="p-4 rounded-2xl bg-red-500/20 hover:bg-red-500/30 text-red-300 font-bold transition-all border border-red-500/30 active:scale-95">AC</button>
+                    <button onclick="gridBackSpace()" class="p-4 rounded-2xl bg-white/5 hover:bg-white/10 text-gray-300 font-semibold transition-all border border-white/10 active:scale-95"><i class="fa-solid fa-delete-left"></i></button>
+                    <button onclick="gridAppend('%')" class="p-4 rounded-2xl bg-white/5 hover:bg-white/10 text-purple-300 font-semibold transition-all border border-white/10 active:scale-95">%</button>
+                    <button onclick="gridAppend('/')" class="p-4 rounded-2xl bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 font-bold transition-all border border-purple-500/30 active:scale-95">÷</button>
+
+                    <button onclick="gridAppend('7')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">7</button>
+                    <button onclick="gridAppend('8')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">8</button>
+                    <button onclick="gridAppend('9')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">9</button>
+                    <button onclick="gridAppend('*')" class="p-4 rounded-2xl bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 font-bold transition-all border border-purple-500/30 active:scale-95">×</button>
+
+                    <button onclick="gridAppend('4')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">4</button>
+                    <button onclick="gridAppend('5')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">5</button>
+                    <button onclick="gridAppend('6')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">6</button>
+                    <button onclick="gridAppend('-')" class="p-4 rounded-2xl bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 font-bold transition-all border border-purple-500/30 active:scale-95">-</button>
+
+                    <button onclick="gridAppend('1')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">1</button>
+                    <button onclick="gridAppend('2')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">2</button>
+                    <button onclick="gridAppend('3')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">3</button>
+                    <button onclick="gridAppend('+')" class="p-4 rounded-2xl bg-purple-600/40 hover:bg-purple-600/60 text-purple-200 font-bold transition-all border border-purple-500/30 active:scale-95">+</button>
+
+                    <button onclick="gridAppend('0')" class="col-span-2 p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">0</button>
+                    <button onclick="gridAppend('.')" class="p-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all border border-white/10 active:scale-95">.</button>
+                    <button onclick="gridCalculate()" class="p-4 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold transition-all shadow-lg shadow-purple-500/25 active:scale-95">=</button>
+                </div>
+            </div>
+
+            <div id="formCalculator" class="glass-panel p-6 sm:p-8 rounded-3xl hidden">
+                <h2 class="text-xl font-bold mb-4 text-purple-300">Form Mathematical Engine</h2>
+                <form id="mathForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs uppercase font-semibold text-gray-400 mb-1">First Number</label>
+                            <input type="number" step="any" id="formNum1" required placeholder="Enter number" class="glass-input w-full p-3.5 rounded-xl text-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase font-semibold text-gray-400 mb-1">Second Number</label>
+                            <input type="number" step="any" id="formNum2" required placeholder="Enter number" class="glass-input w-full p-3.5 rounded-xl text-white outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs uppercase font-semibold text-gray-400 mb-1">Select Operation</label>
+                        <select id="formOperation" class="glass-input w-full p-3.5 rounded-xl text-white outline-none cursor-pointer">
+                            <option value="add" class="bg-slate-900 text-white">Addition (+)</option>
+                            <option value="subtract" class="bg-slate-900 text-white">Subtraction (-)</option>
+                            <option value="multiply" class="bg-slate-900 text-white">Multiplication (×)</option>
+                            <option value="divide" class="bg-slate-900 text-white">Division (÷)</option>
+                            <option value="power" class="bg-slate-900 text-white">Exponentiation (x^y)</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 font-bold text-white shadow-lg shadow-indigo-500/20 transition-all active:scale-98">
+                            Calculate Result
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Form Result Box -->
+                <div id="formResultContainer" class="mt-6 p-4 rounded-2xl glass-input hidden">
+                    <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Computed Answer</span>
+                    <div id="formResultValue" class="text-2xl font-bold text-purple-300"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="glass-panel p-6 rounded-3xl flex flex-col h-[520px] lg:h-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg text-gray-200 flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left mr-2 text-purple-400"></i> History
+                </h3>
+                <button onclick="clearHistory()" class="text-xs text-gray-400 hover:text-red-400 transition-colors">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Clear
+                </button>
+            </div>
+
+            <!-- History list container -->
+            <div id="historyList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+                <div id="emptyHistory" class="text-center text-gray-500 py-16 text-sm">
+                    No calculations recorded yet.
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="messageModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel max-w-sm w-full p-6 rounded-3xl shadow-2xl border border-red-500/30 text-center transform scale-95 transition-transform duration-300" id="modalContent">
+            <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center mx-auto mb-4 text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="modalTitle" class="text-lg font-bold text-white mb-2">Calculation Notice</h3>
+            <p id="modalMessage" class="text-sm text-gray-300 mb-6"></p>
+            <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-500 font-semibold text-white transition-all">
+                Understood
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let gridExpression = "";
+        let history = JSON.parse(localStorage.getItem('madhu_calc_history')) || [];
+
+        window.onload = function() {
+            renderHistory();
+        };
+
+        function switchMode(mode) {
+            const gridBtn = document.getElementById('tabGridBtn');
+            const formBtn = document.getElementById('tabFormBtn');
+            const gridCalc = document.getElementById('gridCalculator');
+            const formCalc = document.getElementById('formCalculator');
+
+            if (mode === 'grid') {
+                gridBtn.className = "flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all bg-purple-600/60 shadow-lg text-white";
+                formBtn.className = "flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all text-gray-400 hover:text-white hover:bg-white/5";
+                gridCalc.classList.remove('hidden');
+                formCalc.classList.add('hidden');
+            } else {
+                formBtn.className = "flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all bg-purple-600/60 shadow-lg text-white";
+                gridBtn.className = "flex-1 py-2 px-4 rounded-xl font-medium text-sm transition-all text-gray-400 hover:text-white hover:bg-white/5";
+                formCalc.classList.remove('hidden');
+                gridCalc.classList.add('hidden');
+            }
+        }
+
+        function gridAppend(val) {
+            gridExpression += val;
+            document.getElementById('gridDisplay').innerText = gridExpression || '0';
+        }
+
+        function gridClear() {
+            gridExpression = "";
+            document.getElementById('gridDisplay').innerText = '0';
+            document.getElementById('gridHistoryPreview').innerText = '';
+        }
+
+        function gridBackSpace() {
+            gridExpression = gridExpression.slice(0, -1);
+            document.getElementById('gridDisplay').innerText = gridExpression || '0';
+        }
+
+        function gridCalculate() {
+            if (!gridExpression) return;
+            try {
+                const sanitized = gridExpression.replace(/×/g, '*').replace(/÷/g, '/');
+                
+                if (/\/0(?!\d)/.test(sanitized) || /\/0\.0+(?![\d])/.test(sanitized)) {
+                    throw new Error("Division by zero is mathematically undefined.");
+                }
+
+                const result = Function('"use strict";return (' + sanitized + ')')();
+                
+                if (!isFinite(result)) {
+                    throw new Error("Mathematical limit exceeded or division by zero.");
+                }
+
+                const formattedResult = Number(result.toFixed(6));
+                addHistoryItem(gridExpression + " = " + formattedResult);
+                
+                document.getElementById('gridHistoryPreview').innerText = gridExpression + " =";
+                gridExpression = String(formattedResult);
+                document.getElementById('gridDisplay').innerText = gridExpression;
+            } catch (error) {
+                showModal("Error", error.message || "Invalid mathematical expression syntax.");
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const num1 = parseFloat(document.getElementById('formNum1').value);
+            const num2 = parseFloat(document.getElementById('formNum2').value);
+            const operation = document.getElementById('formOperation').value;
+            let result;
+            let symbol = '';
+
+            switch(operation) {
+                case 'add':
+                    result = num1 + num2;
+                    symbol = '+';
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    symbol = '-';
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    symbol = '×';
+                    break;
+                case 'divide':
+                    if (num2 === 0) {
+                        showModal("Mathematical Error", "Cannot divide a number by zero.");
+                        return;
+                    }
+                    result = num1 / num2;
+                    symbol = '÷';
+                    break;
+                case 'power':
+                    result = Math.pow(num1, num2);
+                    symbol = '^';
+                    break;
+                default:
+                    return;
+            }
+
+            const formattedResult = Number(result.toFixed(6));
+            const expressionStr = `${num1} ${symbol} ${num2} = ${formattedResult}`;
+
+            const resContainer = document.getElementById('formResultContainer');
+            const resValue = document.getElementById('formResultValue');
+            resContainer.classList.remove('hidden');
+            resValue.innerText = formattedResult;
+
+            addHistoryItem(expressionStr);
+        }
+
+        function addHistoryItem(entryText) {
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            history.unshift({ text: entryText, time: timestamp });
+            if (history.length > 30) history.pop();
+            localStorage.setItem('madhu_calc_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const historyList = document.getElementById('historyList');
+            if (history.length === 0) {
+                historyList.innerHTML = `<div id="emptyHistory" class="text-center text-gray-500 py-16 text-sm">No calculations recorded yet.</div>`;
+                return;
+            }
+
+            let html = '';
+            history.forEach((item) => {
+                html += `
+                    <div class="glass-input p-3 rounded-xl flex justify-between items-center transition-all hover:bg-white/10">
+                        <span class="text-sm font-medium text-gray-200 font-mono">${item.text}</span>
+                        <span class="text-[10px] text-gray-400 bg-black/30 px-2 py-0.5 rounded">${item.time}</span>
+                    </div>
+                `;
+            });
+            historyList.innerHTML = html;
+        }
+
+        function clearHistory() {
+            history = [];
+            localStorage.removeItem('madhu_calc_history');
+            renderHistory();
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            const modal = document.getElementById('messageModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                document.getElementById('modalContent').classList.remove('scale-95');
+                document.getElementById('modalContent').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('messageModal');
+            modal.classList.add('opacity-0');
+            document.getElementById('modalContent').classList.remove('scale-100');
+            document.getElementById('modalContent').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
